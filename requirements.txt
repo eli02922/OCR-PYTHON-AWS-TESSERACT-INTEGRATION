@@ -1,0 +1,9 @@
+Django>=5.0
+djangorestframework
+pillow
+pytesseract
+opencv-python
+numpy
+django-environ
+pymupdf
+pdfminer.six

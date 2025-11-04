@@ -1,0 +1,19 @@
+body {
+    background-color: #f7f9fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+    border: none;
+}
+
+textarea {
+    background-color: #fff;
+    border-radius: 8px;
+    resize: none;
+}
+
+footer {
+    margin-top: 50px;
+}

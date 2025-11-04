@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django OCR Extractor</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="card shadow-lg p-4">
+      <h1 class="text-center mb-4 text-primary">OCR Text Extractor</h1>
+
+      <!-- Upload Form -->
+      <form
+        method="post"
+        enctype="multipart/form-data"
+        action="{% url 'upload_page' %}"
+        class="mb-4"
+      >
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="file" class="form-label fw-bold">
+            Upload Image or PDF:
+          </label>
+          <input
+            type="file"
+            class="form-control"
+            id="file"
+            name="file"
+            accept=".jpg,.jpeg,.png,.pdf"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">
+          Extract Text
+        </button>
+      </form>
+
+      <!-- Display OCR Results -->
+      {% if extracted_text %}
+      <div class="mt-4">
+        <h4>📝 Extracted Text:</h4>
+        <pre class="bg-light border p-3 rounded">{{ extracted_text }}</pre>
+      </div>
+      {% endif %}
+
+      <!-- Display Error (if any) -->
+      {% if error %}
+      <div class="alert alert-danger mt-4">
+        ⚠️ {{ error }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
