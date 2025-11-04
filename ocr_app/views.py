@@ -6,7 +6,7 @@ from django.conf import settings
 from pdfminer.high_level import extract_text as pdf_extract_text
 from PIL import Image
 import fitz
-# import boto3  # ✅ Uncomment this when enabling S3 upload
+# import boto3  #Uncomment this when enabling S3 upload
 
 from .models import OCRDocument
 
@@ -26,7 +26,7 @@ def upload_page(request):
     extracted_text = None
     file_name = None
     error = None
-    s3_file_url = None  # ✅ placeholder for S3 integration (future use)
+    s3_file_url = None  #placeholder for S3 integration (future use)
 
     if request.method == "POST" and "file" in request.FILES:
         uploaded_file = request.FILES["file"]
