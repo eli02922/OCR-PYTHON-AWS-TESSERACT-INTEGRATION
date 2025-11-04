@@ -6,6 +6,7 @@ from django.conf import settings
 from pdfminer.high_level import extract_text as pdf_extract_text
 from PIL import Image
 import fitz
+# import boto3  # ✅ Uncomment this when enabling S3 upload
 
 from .models import OCRDocument
 
@@ -19,11 +20,13 @@ def upload_page(request):
       2. Extracts text using pdfminer (if selectable text exists).
       3. Falls back to image-based OCR using PyMuPDF + pytesseract if needed.
       4. Saves the result into the SQLite database.
-      5. Prepares the pipeline for AWS Textract integration.
+      5. (Optional) Uploads the PDF to S3.
+      6. Prepares the pipeline for AWS Textract integration.
     """
     extracted_text = None
     file_name = None
     error = None
+    s3_file_url = None  # ✅ placeholder for S3 integration (future use)
 
     if request.method == "POST" and "file" in request.FILES:
         uploaded_file = request.FILES["file"]
@@ -38,6 +41,26 @@ def upload_page(request):
             full_path = os.path.join(settings.MEDIA_ROOT, saved_path)
 
             try:
+                #
+                #
+                # Uncomment this block to enable S3 upload
+                #
+                # s3 = boto3.client(
+                #     "s3",
+                #     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                #     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                #     region_name=settings.AWS_S3_REGION_NAME,
+                # )
+                #
+                # bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                # s3_key = f"uploads/{file_name}"
+                #
+                # # Upload the local file to your S3 bucket
+                # s3.upload_file(full_path, bucket_name, s3_key)
+                #
+                # # Optionally get the S3 public URL (if bucket allows public access)
+                # s3_file_url = f"https://{bucket_name}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{s3_key}"
+
                 # --- Step 2: Try extracting selectable text first ---
                 try:
                     selectable_text = pdf_extract_text(full_path).strip()
@@ -93,4 +116,5 @@ def upload_page(request):
         "extracted_text": extracted_text,
         "file_name": file_name,
         "error": error,
+        "s3_file_url": s3_file_url,  #still included for future use
     })

@@ -1,2 +1,4 @@
 media/uploads
 db.sqlite3
+ocr_app/__pycache__
+ocr_python/__pycache__

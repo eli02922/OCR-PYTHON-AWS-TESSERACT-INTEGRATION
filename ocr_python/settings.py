@@ -1,5 +1,6 @@
 from pathlib import Path
 import environ
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,6 +19,19 @@ DATABASES = {
     }
 }
 
+# Use S3 for file storage
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+# Optional – make uploads public or keep them private
+AWS_DEFAULT_ACL = None  # recommended for new setups
+AWS_QUERYSTRING_AUTH = False  # so file URLs are simple/public
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -30,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "ocr_app",
+    "storages"
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -7,3 +7,4 @@ numpy
 django-environ
 pymupdf
 pdfminer.six
+django-storages
