@@ -100,13 +100,10 @@ def upload_page(request):
                 )
 
                 # ------------------------------------------------------------------
-                # Step 6 (Future): LLM Prompt Initialization for Claude / OpenAI
+                # Step 6 (Future): LLM Prompt Initialization (Claude)
                 # ------------------------------------------------------------------
                 #
-                # Example using Claude (Anthropic):
-                #
                 # from anthropic import Anthropic
-                #
                 # client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
                 #
                 # prompt = f"""
@@ -128,19 +125,64 @@ def upload_page(request):
                 #
                 # llm_output = response.content[0].text
                 #
-                # You may store `llm_output` into database or display it on UI.
+                # ------------------------------------------------------------------
+                #  Step 7 (Future): RAG Pipeline Placeholder
+                # ------------------------------------------------------------------
+                # RAG Flow:
+                #   1. Split extracted_text into chunks.
+                #   2. Create embeddings.
+                #   3. Store vectors in a vector DB (Pinecone / Chroma / FAISS).
+                #   4. During queries, retrieve top-k relevant chunks.
+                #   5. Inject retrieved context back into Claude prompt.
+                #
+                # Example RAG (commented):
+                #
+                # from langchain.text_splitter import RecursiveCharacterTextSplitter
+                # from langchain.embeddings import HuggingFaceEmbeddings
+                # from langchain.vectorstores import Chroma  # or Pinecone
+                #
+                # # 1. Chunking the extracted text
+                # splitter = RecursiveCharacterTextSplitter(
+                #     chunk_size=800,
+                #     chunk_overlap=150
+                # )
+                # chunks = splitter.split_text(extracted_text)
+                #
+                # # 2. Embeddings model
+                # embed = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+                #
+                # # 3. Store in local vector DB (Chroma example)
+                # vectordb = Chroma.from_texts(chunks, embed)
+                #
+                # # 4. Retrieval (RAG Query Example)
+                # user_question = "Summarize the financial details from this PDF."
+                # retrieved_docs = vectordb.similarity_search(user_question, k=4)
+                #
+                # # Combine retrievals
+                # rag_context = "\n\n".join([doc.page_content for doc in retrieved_docs])
+                #
+                # # 5. Inject RAG context into Claude
+                # rag_prompt = f"""
+                # Use the following context retrieved from vector DB:
+                #
+                # {rag_context}
+                #
+                # Question:
+                # {user_question}
+                #
+                # Provide a concise and helpful answer.
+                # """
+                #
+                # rag_response = client.messages.create(
+                #     model="claude-3-sonnet-20240229",
+                #     max_tokens=600,
+                #     messages=[{"role": "user", "content": rag_prompt}]
+                # )
+                #
+                # rag_answer = rag_response.content[0].text
                 #
                 # ------------------------------------------------------------------
 
-
-                # --- Step 5 (Optional): Prepare for AWS Textract integration ---
-                # In future, you can replace or complement pytesseract with AWS Textract:
-                #
-                # from .aws_ocr import extract_text_from_aws_textract
-                # aws_text = extract_text_from_aws_textract(full_path)
-                # if aws_text:
-                #     extracted_text = aws_text
-                #     ocr_source = "aws_textract"
 
             except Exception as e:
                 error = f"An error occurred while processing the PDF: {e}"
