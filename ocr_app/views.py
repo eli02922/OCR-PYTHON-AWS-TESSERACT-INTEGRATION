@@ -92,12 +92,46 @@ def upload_page(request):
                     ocr_source = "pytesseract"
                     doc.close()
 
-                # --- Step 4: Save OCR result into SQLite database ---
+                                # --- Step 4: Save OCR result into SQLite database ---
                 OCRDocument.objects.create(
                     file_name=file_name,
                     extracted_text=extracted_text,
                     ocr_source=ocr_source
                 )
+
+                # ------------------------------------------------------------------
+                # Step 6 (Future): LLM Prompt Initialization for Claude / OpenAI
+                # ------------------------------------------------------------------
+                #
+                # Example using Claude (Anthropic):
+                #
+                # from anthropic import Anthropic
+                #
+                # client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+                #
+                # prompt = f"""
+                # You are an assistant that analyzes PDF content.
+                #
+                # Extracted PDF content:
+                # ----------------------
+                # {extracted_text}
+                #
+                # Task:
+                # Summarize the key points and identify any important details.
+                # """
+                #
+                # response = client.messages.create(
+                #     model="claude-3-sonnet-20240229",
+                #     max_tokens=500,
+                #     messages=[{"role": "user", "content": prompt}]
+                # )
+                #
+                # llm_output = response.content[0].text
+                #
+                # You may store `llm_output` into database or display it on UI.
+                #
+                # ------------------------------------------------------------------
+
 
                 # --- Step 5 (Optional): Prepare for AWS Textract integration ---
                 # In future, you can replace or complement pytesseract with AWS Textract:
