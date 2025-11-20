@@ -131,7 +131,6 @@ def upload_page(request):
                 # RAG Flow:
                 #   1. Split extracted_text into chunks.
                 #   2. Create embeddings.
-                #   3. Store vectors in a vector DB (Pinecone / Chroma / FAISS).
                 #   4. During queries, retrieve top-k relevant chunks.
                 #   5. Inject retrieved context back into Claude prompt.
                 #
